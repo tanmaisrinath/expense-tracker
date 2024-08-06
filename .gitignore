@@ -1,4 +1,4 @@
 # secrets
 
-streamlit_app/secrets.toml
+.streamlit/secrets.toml
 streamlit_app/expense-tracker-412918-b05bae2e3dce.json
