@@ -18,7 +18,7 @@ def get_gsheet():
         "https://www.googleapis.com/auth/drive",
     ]
     creds = ServiceAccountCredentials.from_json_keyfile_name(
-        "streamlit_app/expense-tracker-412918-b05bae2e3dce.json", scope
+        "config/expense-tracker-412918-b05bae2e3dce.json", scope
     )
     client = gspread.authorize(creds)
     sheet = client.open("Expense Tracker Updated").sheet1
