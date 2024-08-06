@@ -303,39 +303,13 @@ def login():
             if submit_button:
                 # Check credentials from secrets.toml
                 if (
-                    username == st.secrets["credentials"]["username"]
-                    and password == st.secrets["credentials"]["password"]
+                    username in st.secrets["credentials"]
+                    and password == st.secrets["credentials"][username]
                 ):
                     st.session_state["authenticated"] = True
                     st.session_state["authenticated_user"] = username
                     st.success("Authentication successful! Please set user names.")
                     st.rerun()  # Refresh to show the next form
-                else:
-                    st.error("Invalid username or password.")
-    else:
-        # Prompt for user names after authentication
-        if "user1" not in st.session_state or "user2" not in st.session_state:
-            with st.form(key="user_form"):
-                user1 = st.text_input("Enter name for User 1", key="user1_name")
-                user2 = st.text_input("Enter name for User 2", key="user2_name")
-    # Authentication form
-    if "authenticated" not in st.session_state or not st.session_state["authenticated"]:
-        with st.form(key="auth_form"):
-            username = st.text_input("Username")
-            password = st.text_input("Password", type="password")
-
-            submit_button = st.form_submit_button("Authenticate")
-
-            if submit_button:
-                # Check credentials from secrets.toml
-                if (
-                    username == st.secrets["credentials"]["username"]
-                    and password == st.secrets["credentials"]["password"]
-                ):
-                    st.session_state["authenticated"] = True
-                    st.session_state["authenticated_user"] = username
-                    st.success("Authentication successful! Please set user names.")
-                    st.experimental_rerun()  # Refresh to show the next form
                 else:
                     st.error("Invalid username or password.")
     else:
@@ -358,6 +332,8 @@ def login():
                         st.rerun()  # Refresh to proceed to the main content
                     else:
                         st.error("Please enter both user names.")
+
+    st.title("Login")
 
 
 def main():
