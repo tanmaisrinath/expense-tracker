@@ -1,16 +1,16 @@
 import streamlit as st
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2 import service_account
 import pandas as pd
 from datetime import datetime
 
 # Define the scope and credentials for accessing Google Sheets
-scope = [
+scopes = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",
 ]
-credentials = ServiceAccountCredentials.from_json_keyfile_name(
-    "config/expense-tracker-412918-b05bae2e3dce.json", scope
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["credentials"], scopes=scopes
 )
 client = gspread.authorize(credentials)
 
