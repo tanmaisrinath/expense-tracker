@@ -4,6 +4,7 @@ from google.oauth2 import service_account
 import pandas as pd
 from datetime import datetime
 
+
 # Define the scope and credentials for accessing Google Sheets
 scopes = [
     "https://spreadsheets.google.com/feeds",

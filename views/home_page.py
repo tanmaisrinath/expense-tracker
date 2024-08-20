@@ -3,7 +3,7 @@ import streamlit as st
 
 # Page title
 st.markdown(
-    "<h1 style='text-align: center;'>Welcome to TickTrack2</h1>",
+    "<h1 style='text-align: center;'>Lmfao</h1>",
     unsafe_allow_html=True,
 )
 
