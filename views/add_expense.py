@@ -99,7 +99,9 @@ def run():
             st.session_state.custom_split_amount2 = amount / 2
 
         # Dropdown for who paid
-        paid_by = st.selectbox("Paid By", [st.session_state.user1, st.session_state.user2])
+        paid_by = st.selectbox(
+            "Paid By", [st.session_state.user1, st.session_state.user2]
+        )
 
         # Submit button inside the form
         submit_button = st.form_submit_button("Submit")
