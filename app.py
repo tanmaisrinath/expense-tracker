@@ -1,5 +1,8 @@
 import streamlit as st
 
+with open("assets/styles.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
 # Function to check credentials
 def check_credentials(username, password):
     stored_username = st.secrets["credentials"]["username"]
@@ -29,9 +32,7 @@ if not st.session_state.logged_in:
     # Display login page
     show_login_page()
 else:
-    # Load external CSS
-    with open("assets/styles.css") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+      
 
     # Define pages
     home_page = st.Page(
