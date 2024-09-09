@@ -38,7 +38,7 @@ st.markdown(
     }
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 st.markdown('<h1 class="centered-title">View Expenses</h1>', unsafe_allow_html=True)
 
@@ -87,21 +87,24 @@ shivangi_share = filtered_df.loc[
     filtered_df["Paid By"] == "Tanmai", "Shivangi's Share (INR)"
 ].sum()
 
-st.write('---')
+st.write("---")
 
 col1, col2, col3 = st.columns(3)
-with col1: 
+with col1:
     st.metric(label="Total Monthly Spend", value=f"₹{total_amount}")
-with col2: 
+with col2:
     st.metric(label="Shivangi's Share", value=f"₹{shivangi_share}")
-with col3: 
+with col3:
     st.metric(label="Tanmai's Share", value=f"₹{tanmai_share}")
 
-st.write('---')
-if shivangi_share > tanmai_share:     
-    st.metric(label="Shivangi Owes Tanmai", value=f"₹{(shivangi_share - tanmai_share):.2f}")
-else:     
-    st.metric(label="Shivangi Owes Tanmai", value=f"₹{(tanmai_share - shivangi_share):.2f}")
+st.write("---")
+if shivangi_share > tanmai_share:
+    st.metric(
+        label="Shivangi Owes Tanmai", value=f"₹{(shivangi_share - tanmai_share):.2f}"
+    )
+else:
+    st.metric(
+        label="Tanmai Owes Shivangi", value=f"₹{(tanmai_share - shivangi_share):.2f}"
+    )
 
-st.write('---')
-
+st.write("---")

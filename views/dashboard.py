@@ -29,11 +29,11 @@ def fetch_expenses():
     df = pd.DataFrame(data)
     return df
 
-
-
     # Streamlit UI
+
+
 st.title("Expense Dashboard")
 
 # Fetch and display expenses
 df = fetch_expenses()
-st.write('Work in Progress')
+st.write("Work in Progress")
