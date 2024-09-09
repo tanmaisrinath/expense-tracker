@@ -29,7 +29,18 @@ def fetch_expenses():
     return df
 
 
-st.title("View Expenses")
+st.markdown(
+    """
+    <style>
+    .centered-title {
+        text-align: center;
+        margin-top: -100px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown('<h1 class="centered-title">View Expenses</h1>', unsafe_allow_html=True)
 
 # Fetch and display expenses
 df = fetch_expenses()
@@ -66,17 +77,31 @@ filtered_df["Date"] = filtered_df["Date"].dt.strftime("%d-%m-%y")
 total_amount = filtered_df["Amount (INR)"].sum()
 
 # Display filtered data without the index
-st.dataframe(filtered_df, use_container_width=True)
+st.dataframe(filtered_df, use_container_width=True, hide_index=True)
 
 
-st.write(f"Total Amount ({selected_month}): ₹{total_amount:,.2f}")
-
-## Calulating Owage
 tanmai_share = filtered_df.loc[
     filtered_df["Paid By"] == "Shivangi", "Tanmai's Share (INR)"
 ].sum()
 shivangi_share = filtered_df.loc[
     filtered_df["Paid By"] == "Tanmai", "Shivangi's Share (INR)"
 ].sum()
-st.write(f"Tanmai Owes Shivangi: **{tanmai_share}**")
-st.write(f"Shivangi Owes Tanmai: **{shivangi_share}**")
+
+st.write('---')
+
+col1, col2, col3 = st.columns(3)
+with col1: 
+    st.metric(label="Total Monthly Spend", value=f"₹{total_amount}")
+with col2: 
+    st.metric(label="Shivangi's Share", value=f"₹{shivangi_share}")
+with col3: 
+    st.metric(label="Tanmai's Share", value=f"₹{tanmai_share}")
+
+st.write('---')
+if shivangi_share > tanmai_share:     
+    st.metric(label="Shivangi Owes Tanmai", value=f"₹{(shivangi_share - tanmai_share):.2f}")
+else:     
+    st.metric(label="Shivangi Owes Tanmai", value=f"₹{(tanmai_share - shivangi_share):.2f}")
+
+st.write('---')
+

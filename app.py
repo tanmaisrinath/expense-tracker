@@ -11,9 +11,19 @@ def check_credentials(username, password):
 
 # Function to display the login page
 def show_login_page():
-    st.title("Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    st.markdown(
+    """
+    <style>
+    .centered-title {
+        text-align: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+    st.markdown('<h2 class="centered-title">Login</h2>', unsafe_allow_html=True)
+    username = st.text_input("Username", placeholder='Username',label_visibility="collapsed")
+    password = st.text_input("Password", placeholder='Password',label_visibility="collapsed",type="password")
     
     if st.button("Login"):
         if check_credentials(username, password):
@@ -44,7 +54,10 @@ else:
     view_expenses_page = st.Page(
         page="views/view_expenses.py", title="View Expenses", icon=":material/visibility:"
     )
+    dashboard_page = st.Page(
+        page="views/dashboard.py", title="Dashboard", icon=":material/bar_chart_4_bars:"
+    )
 
     # Navigation
-    pg = st.navigation(pages=[home_page, add_expense_page, view_expenses_page])
+    pg = st.navigation(pages=[home_page, add_expense_page, view_expenses_page, dashboard_page])
     pg.run()

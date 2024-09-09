@@ -46,7 +46,18 @@ def add_expense(date, amount, description, split_type, paid_by, category):
     sheet.append_row(data)
 
 
-st.title("Add Expense")
+st.markdown(
+    """
+    <style>
+    .centered-title {
+        text-align: center;
+        margin-top: -100px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown('<h1 class="centered-title">Add Expense</h1>', unsafe_allow_html=True)
 
 # Initialize session state variables
 if "custom_split_amount1" not in st.session_state:
