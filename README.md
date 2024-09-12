@@ -1,5 +1,7 @@
-# expense-tracker
+# Project To-Do List
 
-- [] email reminder
-- [] update owage values after viewing and settling expeneses
-- [] update layout of view and settle expense buttons
+- [x] Set up repository
+- [x] Write base layout
+- [ ] Code for homepage
+- [ ] Update add expense page to add a new column called settled
+- [ ] Update view expense page layout
