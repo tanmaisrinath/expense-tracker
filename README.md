@@ -1,3 +1,5 @@
 # expense-tracker
-- email reminder 
-- logic to reset owage if settled
+
+- [] email reminder
+- [] update owage values after viewing and settling expeneses
+- [] update layout of view and settle expense buttons
