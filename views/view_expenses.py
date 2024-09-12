@@ -11,6 +11,7 @@ with open("assets/styles.css") as f:
 scopes = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/spreadsheets",
 ]
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["credentials"], scopes=scopes
@@ -27,6 +28,14 @@ def fetch_expenses():
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
     return df
+
+
+def update_row(cell, value):
+    try:
+        sheet.update(cell, [[value]])
+        print(f"Cell {cell} updated successfully.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 st.markdown(
@@ -66,7 +75,6 @@ else:
     selected_period = datetime.strptime(selected_month, "%B %Y").strftime("%Y-%m")
     filtered_df = df[df["Month_Year"] == pd.Period(selected_period, freq="M")]
 
-
 # Drop the "Month_Year" column before displaying
 filtered_df = filtered_df.drop(columns=["Month_Year"])
 
@@ -78,7 +86,6 @@ total_amount = filtered_df["Amount (INR)"].sum()
 
 # Display filtered data without the index
 st.dataframe(filtered_df, use_container_width=True, hide_index=True)
-
 
 tanmai_share = filtered_df.loc[
     filtered_df["Paid By"] == "Shivangi", "Tanmai's Share (INR)"
@@ -108,3 +115,20 @@ else:
     )
 
 st.write("---")
+
+
+if st.button("View Pending Expenses"):
+    pending_expenses_df = df[df["Settled"].str.lower() == "no"]
+    pending_expenses_df = pending_expenses_df.drop(columns=["Month_Year"])
+    if pending_expenses_df.empty:
+        st.write("All expenses have been settled! :)")
+    else:
+        st.dataframe(pending_expenses_df, use_container_width=True, hide_index=True)
+
+
+if st.button("Update Expenses"):
+    pending_expenses_df = df[df["Settled"].str.lower() == "no"]
+    cell_numbers = [f"{index + 2}" for index in pending_expenses_df.index]
+    for cell_number in cell_numbers:
+        update_row(f"H{cell_number}", "Yes")
+    st.success("Pending expenses have been settled!")
