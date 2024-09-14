@@ -40,6 +40,7 @@ def add_expense(date, amount, description, split_type, paid_by, category):
         amount1,
         amount2,
         category,
+        "No",
     ]
 
     # Append data to Google Sheet
@@ -55,7 +56,7 @@ st.markdown(
     }
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 st.markdown('<h1 class="centered-title">Add Expense</h1>', unsafe_allow_html=True)
 

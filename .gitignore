@@ -3,3 +3,5 @@
 config/expense-tracker-412918-b05bae2e3dce.json
 .streamlit/secrets.toml
 ~
+PyWhatKit_DB.txt
+views/__pycache__

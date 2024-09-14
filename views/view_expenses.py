@@ -3,6 +3,7 @@ import gspread
 from google.oauth2 import service_account
 import pandas as pd
 from datetime import datetime
+from views import send_reminder
 
 with open("assets/styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -81,54 +82,68 @@ filtered_df = filtered_df.drop(columns=["Month_Year"])
 # Format the 'Date' column to remove the timestamp
 filtered_df["Date"] = filtered_df["Date"].dt.strftime("%d-%m-%y")
 
-# Calculate the total amount for the selected period
-total_amount = filtered_df["Amount (INR)"].sum()
 
-# Display filtered data without the index
 st.dataframe(filtered_df, use_container_width=True, hide_index=True)
 
-tanmai_share = filtered_df.loc[
-    filtered_df["Paid By"] == "Shivangi", "Tanmai's Share (INR)"
+pending_expenses_df = df[df["Settled"].str.lower() == "no"]
+pending_expenses_df = pending_expenses_df.drop(columns=["Month_Year"])
+
+tanmai_share = pending_expenses_df.loc[
+    pending_expenses_df["Paid By"] == "Shivangi", "Tanmai's Share (INR)"
 ].sum()
-shivangi_share = filtered_df.loc[
-    filtered_df["Paid By"] == "Tanmai", "Shivangi's Share (INR)"
+shivangi_share = pending_expenses_df.loc[
+    pending_expenses_df["Paid By"] == "Tanmai", "Shivangi's Share (INR)"
 ].sum()
 
 st.write("---")
-
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric(label="Total Monthly Spend", value=f"₹{total_amount}")
-with col2:
-    st.metric(label="Shivangi's Share", value=f"₹{shivangi_share}")
-with col3:
-    st.metric(label="Tanmai's Share", value=f"₹{tanmai_share}")
-
-st.write("---")
-if shivangi_share > tanmai_share:
-    st.metric(
-        label="Shivangi Owes Tanmai", value=f"₹{(shivangi_share - tanmai_share):.2f}"
-    )
-else:
-    st.metric(
-        label="Tanmai Owes Shivangi", value=f"₹{(tanmai_share - shivangi_share):.2f}"
-    )
-
-st.write("---")
-
-
 if st.button("View Pending Expenses"):
-    pending_expenses_df = df[df["Settled"].str.lower() == "no"]
-    pending_expenses_df = pending_expenses_df.drop(columns=["Month_Year"])
     if pending_expenses_df.empty:
         st.write("All expenses have been settled! :)")
     else:
         st.dataframe(pending_expenses_df, use_container_width=True, hide_index=True)
 
+        total_amount = pending_expenses_df["Amount (INR)"].sum()
 
-if st.button("Update Expenses"):
+        st.write("---")
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(label="Total Spend", value=f"₹{total_amount}")
+        with col2:
+            st.metric(label="Shivangi's Share", value=f"₹{shivangi_share}")
+        with col3:
+            st.metric(label="Tanmai's Share", value=f"₹{tanmai_share}")
+
+        st.write("---")
+        if shivangi_share > tanmai_share:
+            st.metric(
+                label="Shivangi Owes Tanmai",
+                value=f"₹{(shivangi_share - tanmai_share):.2f}",
+            )
+        else:
+            st.metric(
+                label="Tanmai Owes Shivangi",
+                value=f"₹{(tanmai_share - shivangi_share):.2f}",
+            )
+
+if st.button("Update Pending Expenses"):
     pending_expenses_df = df[df["Settled"].str.lower() == "no"]
     cell_numbers = [f"{index + 2}" for index in pending_expenses_df.index]
     for cell_number in cell_numbers:
         update_row(f"H{cell_number}", "Yes")
     st.success("Pending expenses have been settled!")
+
+owage_message = (
+    f"Hello from Ticktrack2! 📊✨\n\n"
+    f"Time to settle up, ugh :(\n\n"
+    f"💸 Tanmai's Share: *₹{tanmai_share}*\n"
+    f"💸 Shivangi's Share: *₹{shivangi_share}*\n\n"
+    f"🔍 Summary: {'Shivangi owes Tanmai *₹' + str(abs(shivangi_share - tanmai_share)) +'*' if shivangi_share > tanmai_share else 'Tanmai owes Shivangi *₹' + str(abs(shivangi_share - tanmai_share))+'*' }.\n\n"
+    f"🚀 Check out the full details at: https://ticktracktwo.streamlit.app/"
+)
+
+if st.button("Send Reminder On WhatsApp"):
+    send_reminder.send_message(owage_message)
+
+if st.button("Send Reminder on Email"):
+    send_reminder.send_gmail(owage_message)
