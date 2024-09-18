@@ -43,7 +43,6 @@ def add_expense(date, amount, description, split_type, paid_by, category):
         "No",
     ]
 
-    # Append data to Google Sheet
     sheet.append_row(data)
 
 

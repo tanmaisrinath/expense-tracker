@@ -142,8 +142,5 @@ owage_message = (
     f"🚀 Check out the full details at: https://ticktracktwo.streamlit.app/"
 )
 
-if st.button("Send Reminder On WhatsApp"):
-    send_reminder.send_message(owage_message)
-
 if st.button("Send Reminder on Email"):
     send_reminder.send_gmail(owage_message)
