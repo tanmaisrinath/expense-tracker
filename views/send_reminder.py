@@ -1,15 +1,3 @@
-import pywhatkit as w
-import time
-
-try:
-    import pyautogui
-    import keyboard as k
-except Exception:
-    st.write(
-        "Error sending WhatsApp message. Please try again later.\n If you're using a mobile device, this feature is not supported, please use an e-mail reminder instead"
-    )
-
-import datetime
 import streamlit as st
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -17,30 +5,6 @@ from email.mime.text import MIMEText
 
 tanmai = st.secrets["tanmai"]
 shivangi = st.secrets["shivangi"]
-
-
-def send_message(message):
-    current_time = datetime.datetime.now()
-    hour = current_time.hour
-    minute = current_time.minute
-
-    phone_number = tanmai["number"]
-    wait_time = 15
-
-    call_time = minute + 1
-    if call_time <= wait_time:
-        call_time = minute + wait_time + 1
-
-    try:
-        w.sendwhatmsg(phone_number, message, hour, call_time, wait_time, close_time=2)
-    except:
-        st.write(
-            "Error sending WhatsApp message. Please try again later.\n If you're using a mobile device, this feature is not supported, please use an e-mail reminder instead"
-        )
-
-    pyautogui.click(1050, 950)
-    time.sleep(2)
-    k.press_and_release("enter")
 
 
 def send_gmail(body):
