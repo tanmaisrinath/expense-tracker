@@ -126,21 +126,24 @@ if st.button("View Pending Expenses"):
                 value=f"₹{(tanmai_share - shivangi_share):.2f}",
             )
 
-if st.button("Update Pending Expenses"):
-    pending_expenses_df = df[df["Settled"].str.lower() == "no"]
-    cell_numbers = [f"{index + 2}" for index in pending_expenses_df.index]
-    for cell_number in cell_numbers:
-        update_row(f"H{cell_number}", "Yes")
-    st.success("Pending expenses have been settled!")
 
 owage_message = (
     f"Hello from Ticktrack2! 📊✨\n\n"
     f"Time to settle up, ugh :(\n\n"
-    f"💸 Tanmai's Share: *₹{tanmai_share}*\n"
-    f"💸 Shivangi's Share: *₹{shivangi_share}*\n\n"
-    f"🔍 Summary: {'Shivangi owes Tanmai *₹' + str(abs(shivangi_share - tanmai_share)) +'*' if shivangi_share > tanmai_share else 'Tanmai owes Shivangi *₹' + str(abs(shivangi_share - tanmai_share))+'*' }.\n\n"
+    f"💸 Tanmai's Share: ₹{tanmai_share}\n"
+    f"💸 Shivangi's Share: ₹{shivangi_share}\n\n"
+    f"🔍 Summary: {'Shivangi owes Tanmai ₹' + str(abs(shivangi_share - tanmai_share)) if shivangi_share > tanmai_share else 'Tanmai owes Shivangi ₹' + str(abs(shivangi_share - tanmai_share)) }.\n\n"
     f"🚀 Check out the full details at: https://ticktracktwo.streamlit.app/"
 )
 
-if st.button("Send Reminder on Email"):
-    send_reminder.send_gmail(owage_message)
+col1, col2 = st.columns(2, gap="large")
+with col1:
+    if st.button("Update Pending Expenses"):
+        pending_expenses_df = df[df["Settled"].str.lower() == "no"]
+        cell_numbers = [f"{index + 2}" for index in pending_expenses_df.index]
+        for cell_number in cell_numbers:
+            update_row(f"H{cell_number}", "Yes")
+        st.success("Pending expenses have been settled!")
+with col2:
+    if st.button("Send Reminder on Email"):
+        send_reminder.send_gmail(owage_message)
