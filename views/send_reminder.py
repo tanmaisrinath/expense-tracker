@@ -1,7 +1,14 @@
 import pywhatkit as w
 import time
-import pyautogui
-import keyboard as k
+
+try:
+    import pyautogui
+    import keyboard as k
+except Exception:
+    st.write(
+        "Error sending WhatsApp message. Please try again later.\n If you're using a mobile device, this feature is not supported, please use an e-mail reminder instead"
+    )
+
 import datetime
 import streamlit as st
 import smtplib
